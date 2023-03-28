@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.khiarname.data.PortalState
 
 @Composable
 fun IndexItem(
@@ -47,9 +48,9 @@ fun IndexItem(
             ) {
                 Text(
                     text = when (state) {
-                        is PortalState.EndClose -> "start: ${state.start}"
-                        is PortalState.EndOpen -> "start: ${state.start}"
-                        is PortalState.Start -> "end: ${state.end}"
+                        is PortalState.EndClose -> "-> ${state.start}"
+                        is PortalState.EndOpen -> "-> ${state.start}"
+                        is PortalState.Start -> "<- ${state.end}"
                     }
                 )
             }

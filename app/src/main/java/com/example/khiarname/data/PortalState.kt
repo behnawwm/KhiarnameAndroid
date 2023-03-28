@@ -1,4 +1,4 @@
-package com.example.khiarname
+package com.example.khiarname.data
 
 sealed interface PortalState {
     class Start(val end: Int) : PortalState

@@ -14,15 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.example.khiarname.PortalState.EndOpen
-import com.example.khiarname.PortalState.Start
+import com.example.khiarname.data.Portal
+import com.example.khiarname.data.PortalState
 
 @Composable
 fun TelepantingScreen(
     currentStep: Int,
     stepCount: Int,
     portals: List<Portal>,
-    onPortalUsed: (Portal) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -58,10 +57,13 @@ fun providePortalState(
     portals: List<Portal>
 ): PortalState? { //todo what if start of multiple portals are the same
     portals.find { it.start == index }?.let {
-        return Start(end = it.end)
+        return PortalState.Start(end = it.end)
     }
     portals.find { it.end == index }?.let {
-        return EndOpen(start = it.start)
+        return if (it.isOpen)
+            PortalState.EndOpen(start = it.start)
+        else
+            PortalState.EndClose(start = it.start)
     }
     return null
 }

@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.khiarname.data.Portal
 import com.example.khiarname.ui.theme.KhiarnameTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,11 +26,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             KhiarnameTheme {
 
-                val stepCount: Int = 4
-                val portals: List<Portal> = listOf(
-                    Portal(start = 1, end = 2),
-                    Portal(start = 0, end = 3)
-                )
+                val stepCount: Int = 5
+                val portals = remember {
+                    mutableStateListOf(
+                        Portal(start = 1, end = 2, isOpen = true),
+                        Portal(start = 0, end = 3, isOpen = true)
+                    )
+                }
 
                 var currentStep by remember {
                     mutableStateOf(0)
@@ -39,9 +43,6 @@ class MainActivity : ComponentActivity() {
                         currentStep = currentStep,
                         stepCount = stepCount,
                         portals = portals,
-                        onPortalUsed = { usedPortal ->
-                            //todo
-                        },
                         modifier = Modifier.weight(1f)
                     )
                     Row(
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Button(
-                            onClick = { currentStep -= 1 },
+                            onClick = { currentStep -= 1 }, //todo add backward logic
                             modifier = Modifier.weight(1f),
                             enabled = currentStep != 0
                         ) {
@@ -57,7 +58,16 @@ class MainActivity : ComponentActivity() {
                         }
 
                         Button(
-                            onClick = { currentStep += 1 },
+                            onClick = {
+                                currentStep = findNextStep(
+                                    currentStep = currentStep,
+                                    portals = portals,
+                                    onPortalClose = {
+                                        portals.remove(it)
+                                        portals.add(it.copy(isOpen = false))
+                                    }
+                                )
+                            },
                             modifier = Modifier.weight(1f),
                             enabled = currentStep != stepCount - 1
                         ) {
@@ -68,5 +78,18 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+
+    private fun findNextStep(
+        currentStep: Int,
+        portals: List<Portal>,
+        onPortalClose: (Portal) -> Unit,
+    ): Int {
+        portals.filter { it.isOpen }.find { it.end == currentStep }?.let {
+            onPortalClose(it)
+            return it.start
+        }
+
+        return currentStep + 1
     }
 }
