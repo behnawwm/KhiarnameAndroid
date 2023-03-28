@@ -3,6 +3,7 @@ package com.example.khiarname
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.khiarname.data.Portal
@@ -45,6 +47,12 @@ class MainActivity : ComponentActivity() {
                         portals = portals,
                         modifier = Modifier.weight(1f)
                     )
+                    AnimatedVisibility(visible = currentStep == stepCount - 1) {
+                        Text(
+                            "End Reached!🎉",
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
