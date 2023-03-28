@@ -1,33 +1,21 @@
 package com.example.khiarname
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.InspectableModifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.example.khiarname.PortalState.*
+import com.example.khiarname.PortalState.EndOpen
+import com.example.khiarname.PortalState.Start
 
 @Composable
 fun TelepantingScreen(
@@ -56,13 +44,10 @@ fun TelepantingScreen(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .padding(top = 32.dp)
-                    .offset(x = antOffset)
-                    .size(16.dp)
-                    .background(Color.Red)
+            Ant(
+                modifier = Modifier.offset(x = antOffset)
             )
+
 
         }
     }
@@ -81,56 +66,16 @@ fun providePortalState(
     return null
 }
 
-//fun providePortalState(index: Int, portals: List<Portal>): PortalState? {
-////    return when (index) {
-////        in portals.map { it.end } -> EndOpen()
-////        in portals.map { it.start } -> Start()
-////        else -> null
-////    }
-//}
 
 @Composable
-fun IndexItem(
-    index: Int,
-    width: Dp,
-    state: PortalState?,
-    modifier: Modifier = Modifier
-) {
-    Box(
+fun Ant(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.ant),
+        contentDescription = null,
         modifier = modifier
-            .width(width)
-            .height(100.dp)
-    ) {
-        Text(
-            index.toString(),
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
-        state?.let { state ->
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .align(Alignment.Center)
-                    .background(
-                        when (state) {
-                            is EndClose -> Color.DarkGray
-                            is EndOpen -> Color.Cyan
-                            is Start -> Color.LightGray
-                        }
-                    )
-            ) {
-                Text(
-                    text = when (state) {
-                        is EndClose -> "start: ${state.start}"
-                        is EndOpen -> "start: ${state.start}"
-                        is Start -> "end: ${state.end}"
-                    }
-                )
-            }
-        }
-
-    }
+            .size(40.dp)
+    )
 }
-
 
 //@Preview
 //@Composable
