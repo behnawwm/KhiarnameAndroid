@@ -58,7 +58,16 @@ class MainActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Button(
-                            onClick = { currentStep -= 1 }, //todo add backward logic
+                            onClick = {
+                                currentStep = findPreviousStep(
+                                    currentStep = currentStep,
+                                    portals = portals,
+                                    onPortalOpen = {
+                                        portals.remove(it)
+                                        portals.add(it.copy(isOpen = true))
+                                    }
+                                )
+                            },
                             modifier = Modifier.weight(1f),
                             enabled = currentStep != 0
                         ) {
@@ -99,5 +108,18 @@ class MainActivity : ComponentActivity() {
         }
 
         return currentStep + 1
+    }
+
+    private fun findPreviousStep(
+        currentStep: Int,
+        portals: List<Portal>,
+        onPortalOpen: (Portal) -> Unit,
+    ): Int {
+        portals.filter { !it.isOpen }.find { it.start == currentStep }?.let {
+            onPortalOpen(it)
+            return it.end
+        }
+
+        return currentStep - 1
     }
 }
