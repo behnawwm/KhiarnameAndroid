@@ -1,5 +1,7 @@
 package com.example.khiarname
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,12 +36,11 @@ fun TelepantingScreen(
         val maxWidthSize = maxWidth
         val itemWidth = maxWidthSize / stepCount
 
-        val antOffset = currentStep * itemWidth + itemWidth / 2
+        val antOffset by animateDpAsState(targetValue = currentStep * itemWidth + itemWidth / 2)
 
         Box(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 (0..stepCount).forEach { index ->
                     IndexItem(
@@ -65,7 +67,6 @@ fun IndexItem(index: Int, width: Dp, modifier: Modifier = Modifier) {
         modifier = modifier
             .width(width)
             .height(100.dp)
-//            .padding(4.dp)
     ) {
         Text(
             index.toString(),
@@ -73,11 +74,6 @@ fun IndexItem(index: Int, width: Dp, modifier: Modifier = Modifier) {
         )
     }
 }
-
-data class Portal(
-    val start: Int,
-    val end: Int
-)
 
 
 //@Preview
