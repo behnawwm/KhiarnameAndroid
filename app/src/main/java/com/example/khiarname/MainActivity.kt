@@ -26,8 +26,8 @@ class MainActivity : ComponentActivity() {
 
                 val stepCount: Int = 4
                 val portals: List<Portal> = listOf(
-                    Portal(2, 1),
-//            Portal(4, 2)
+                    Portal(start = 1, end = 2),
+                    Portal(start = 0, end = 3)
                 )
 
                 var currentStep by remember {
@@ -39,6 +39,9 @@ class MainActivity : ComponentActivity() {
                         currentStep = currentStep,
                         stepCount = stepCount,
                         portals = portals,
+                        onPortalUsed = { usedPortal ->
+                            //todo
+                        },
                         modifier = Modifier.weight(1f)
                     )
                     Row(
