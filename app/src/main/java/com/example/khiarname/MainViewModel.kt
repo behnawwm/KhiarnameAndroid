@@ -1,7 +1,5 @@
 package com.example.khiarname
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.khiarname.data.Portal
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,64 +22,54 @@ class MainViewModel : ViewModel() {
 
     fun goToNextStep() {
         _state.update {
+            val portalToBeClosed = findOpenPortalOnCurrentStep(
+                currentStep = it.currentStep,
+                portals = it.portals
+            )
             it.copy(
-                currentStep = findNextStep(
-                    currentStep = _state.value.currentStep,
-                    portals = _state.value.portals,
-                )
+                currentStep = portalToBeClosed?.start ?: (it.currentStep + 1),
+                portals = it.portals.toMutableList().apply {
+                    portalToBeClosed?.let {
+                        remove(portalToBeClosed)
+                        add(portalToBeClosed.copy(isOpen = false))
+                    }
+                }
             )
         }
     }
 
     fun goToPreviousStep() {
         _state.update {
+            val portalToBeOpened = findClosedPortalOnCurrentStep(
+                currentStep = it.currentStep,
+                portals = it.portals
+            )
             it.copy(
-                currentStep = findPreviousStep(
-                    currentStep = _state.value.currentStep,
-                    portals = _state.value.portals,
-                    onPortalOpen = { openedPortal ->
-                        _state.update {
-                            it.copy(portals = _state.value.portals.toMutableList() + openedPortal)
-                        }
+                currentStep = portalToBeOpened?.end ?: (it.currentStep - 1),
+                portals = it.portals.toMutableList().apply {
+                    portalToBeOpened?.let {
+                        remove(portalToBeOpened)
+                        add(portalToBeOpened.copy(isOpen = true))
                     }
-                )
+                }
             )
         }
     }
 
-    private fun findNextStep(
-        currentStep: Int,
-        portals: List<Portal>,
-    ): Int {
+    private fun findOpenPortalOnCurrentStep(currentStep: Int, portals: List<Portal>): Portal? {
         portals.filter { it.isOpen }.find { it.end == currentStep }?.let {
-            closePortal(it)
-            return it.start
+            return it
         }
 
-        return currentStep + 1
+        return null
     }
 
-    private fun closePortal(portal: Portal) {
-        _state.update {
-            val currentPortals = _state.value.portals.toMutableList().apply {
-                remove(portal)
-                add(portal.copy(isOpen = false))
-            }
-            it.copy(portals = currentPortals)
-        }
-    }
-
-    private fun findPreviousStep(
-        currentStep: Int,
-        portals: List<Portal>,
-        onPortalOpen: (Portal) -> Unit,
-    ): Int {
+    private fun findClosedPortalOnCurrentStep(currentStep: Int, portals: List<Portal>): Portal? {
         portals.filter { !it.isOpen }.find { it.start == currentStep }?.let {
-            onPortalOpen(it)
-            return it.end
+            return it
         }
 
-        return currentStep - 1
+        return null
     }
 
 }
