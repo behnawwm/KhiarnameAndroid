@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
                     }
+                    Text("moves: ${state.previousMoves.map { Pair(it.from, it.to) }}")
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
