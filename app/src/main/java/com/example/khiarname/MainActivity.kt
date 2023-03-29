@@ -28,11 +28,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             KhiarnameTheme {
 
-                val stepCount: Int = 6
+                val stepCount: Int = 5
                 val portals = remember {
                     mutableStateListOf(
-                        Portal(start = 2, end = 3, isOpen = true),
-                        Portal(start = 1, end = 4, isOpen = true)
+                        Portal(start = 1, end = 2, isOpen = true),
+                        Portal(start = 0, end = 3, isOpen = true)
                     )
                 }
 
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f),
                             enabled = currentStep != 0
                         ) {
-                            Text("previous step")
+                            Text("prev step")
                         }
 
                         Button(
