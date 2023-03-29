@@ -26,15 +26,17 @@ class MainViewModel : ViewModel() {
                 currentStep = it.currentStep,
                 portals = it.portals
             )
-            it.copy(
-                currentStep = portalToBeClosed?.start ?: (it.currentStep + 1),
-                portals = it.portals.toMutableList().apply {
-                    portalToBeClosed?.let {
+            portalToBeClosed?.let { portalToBeClosed ->
+                it.copy(
+                    currentStep = portalToBeClosed.start,
+                    portals = it.portals.toMutableList().apply {
                         remove(portalToBeClosed)
                         add(portalToBeClosed.copy(isOpen = false))
                     }
-                }
-            )
+                )
+            } ?: run {
+                it.copy(currentStep = it.currentStep + 1)
+            }
         }
     }
 
@@ -44,15 +46,17 @@ class MainViewModel : ViewModel() {
                 currentStep = it.currentStep,
                 portals = it.portals
             )
-            it.copy(
-                currentStep = portalToBeOpened?.end ?: (it.currentStep - 1),
-                portals = it.portals.toMutableList().apply {
-                    portalToBeOpened?.let {
+            portalToBeOpened?.let { portalToBeOpened ->
+                it.copy(
+                    currentStep = portalToBeOpened.end,
+                    portals = it.portals.toMutableList().apply {
                         remove(portalToBeOpened)
                         add(portalToBeOpened.copy(isOpen = true))
                     }
-                }
-            )
+                )
+            } ?: run {
+                it.copy(currentStep = it.currentStep - 1)
+            }
         }
     }
 
