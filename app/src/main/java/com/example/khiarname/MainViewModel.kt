@@ -2,9 +2,11 @@ package com.example.khiarname
 
 import androidx.lifecycle.ViewModel
 import com.example.khiarname.data.Portal
+import com.example.khiarname.util.formatToText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.math.roundToInt
 
 class MainViewModel : ViewModel() {
     data class State(
@@ -13,6 +15,7 @@ class MainViewModel : ViewModel() {
             Portal(start = 2, end = 3, isOpen = true),
             Portal(start = 1, end = 4, isOpen = true)
         ),
+        val portalsString: String = portals.formatToText(),
         val currentStep: Int = 0,
     )
 
@@ -60,6 +63,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun updateStepCount(stepCount: Float) {
+        _state.update { it.copy(stepCount = stepCount.roundToInt()) }
+    }
+
     private fun findOpenPortalOnCurrentStep(currentStep: Int, portals: List<Portal>): Portal? {
         portals.filter { it.isOpen }.find { it.end == currentStep }?.let {
             return it
@@ -76,4 +83,26 @@ class MainViewModel : ViewModel() {
         return null
     }
 
+    fun updatePortals(portalsString: String) {
+        _state.update { it.copy(portalsString = portalsString) }
+        if (!isPortalsStringValid(portalsString))
+            return
+
+        val regex = Regex("(\\d+),(\\d+)")
+        val matches = regex.findAll(portalsString)
+        val portals = matches.map {
+            Portal(
+                start = it.groupValues[1].toInt(),
+                end = it.groupValues[2].toInt(),
+                isOpen = true
+            )
+        }.toList()
+
+        _state.update { it.copy(portals = portals) }
+
+    }
+
+    private fun isPortalsStringValid(portalsString: String): Boolean {
+        return true //todo
+    }
 }
