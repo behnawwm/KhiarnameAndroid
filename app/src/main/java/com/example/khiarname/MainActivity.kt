@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     )
                     AnimatedVisibility(visible = state.currentStep == state.stepCount - 1) {
                         Text(
-                            "End Reached!🎉",
+                            "End Reached!🎉  time: ${state.previousMoves.size}",
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
                     }

@@ -76,10 +76,20 @@ class MainViewModel : ViewModel() {
     fun goToPreviousStep() {
         _state.update {
             it.previousMoves.lastOrNull()?.let { prevMove ->
-                //todo revert portal state
+                val foundPortal = if (prevMove.to < prevMove.from)
+                    it.portals.find { it.start == prevMove.to }
+                else
+                    null
                 it.copy(
                     currentStep = prevMove.from,
-                    previousMoves = it.previousMoves.toMutableList().apply { removeLast() }
+                    previousMoves = it.previousMoves.toMutableList().apply { removeLast() },
+                    portals = it.portals.toMutableList().apply {
+                        foundPortal?.let { foundPortal ->
+                            remove(foundPortal)
+                            add(foundPortal.copy(isOpen = !foundPortal.isOpen))
+                            //todo bug: when portal state changes after passing (close -> open)
+                        }
+                    }
                 )
             } ?: it.copy(
                 currentStep = 0
