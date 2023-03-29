@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Button(
                             onClick = {
-                                viewModel.goToNextStep()
+                                viewModel.goToPreviousStep()
                             },
                             modifier = Modifier.weight(1f),
                             enabled = state.currentStep != 0
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 
                         Button(
                             onClick = {
-                                viewModel.goToPreviousStep()
+                                viewModel.goToNextStep()
                             },
                             modifier = Modifier.weight(1f),
                             enabled = state.currentStep != state.stepCount - 1

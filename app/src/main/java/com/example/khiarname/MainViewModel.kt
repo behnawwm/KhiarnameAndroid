@@ -28,11 +28,6 @@ class MainViewModel : ViewModel() {
                 currentStep = findNextStep(
                     currentStep = _state.value.currentStep,
                     portals = _state.value.portals,
-                    onPortalClose = { closedPortal ->
-                        _state.update {
-                            it.copy(portals = _state.value.portals.toMutableList() - closedPortal)
-                        }
-                    }
                 )
             )
         }
@@ -54,18 +49,26 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
     private fun findNextStep(
         currentStep: Int,
         portals: List<Portal>,
-        onPortalClose: (Portal) -> Unit,
     ): Int {
         portals.filter { it.isOpen }.find { it.end == currentStep }?.let {
-            onPortalClose(it)
+            closePortal(it)
             return it.start
         }
 
         return currentStep + 1
+    }
+
+    private fun closePortal(portal: Portal) {
+        _state.update {
+            val currentPortals = _state.value.portals.toMutableList().apply {
+                remove(portal)
+                add(portal.copy(isOpen = false))
+            }
+            it.copy(portals = currentPortals)
+        }
     }
 
     private fun findPreviousStep(
