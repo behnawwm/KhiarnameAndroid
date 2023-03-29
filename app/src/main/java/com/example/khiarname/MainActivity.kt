@@ -105,15 +105,16 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.goToPreviousStep()
-                            },
-                            modifier = Modifier.weight(1f),
-                            enabled = state.currentStep != 0
-                        ) {
-                            Text("previous step")
-                        }
+                        //todo debug
+//                        Button(
+//                            onClick = {
+//                                viewModel.goToPreviousStep()
+//                            },
+//                            modifier = Modifier.weight(1f),
+//                            enabled = state.currentStep != 0
+//                        ) {
+//                            Text("previous step")
+//                        }
 
                         Button(
                             onClick = {

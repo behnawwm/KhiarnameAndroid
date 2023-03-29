@@ -78,6 +78,8 @@ class MainViewModel : ViewModel() {
             it.previousMoves.lastOrNull()?.let { prevMove ->
                 val foundPortal = if (prevMove.to < prevMove.from)
                     it.portals.find { it.start == prevMove.to }
+//                else if(prevMove)
+//                    it.portals.find { it.start == prevMove.from }
                 else
                     null
                 it.copy(
