@@ -88,21 +88,24 @@ class MainViewModel : ViewModel() {
         if (!isPortalsStringValid(portalsString))
             return
 
-        val regex = Regex("(\\d+),(\\d+)")
-        val matches = regex.findAll(portalsString)
-        val portals = matches.map {
-            Portal(
-                start = it.groupValues[1].toInt(),
-                end = it.groupValues[2].toInt(),
-                isOpen = true
-            )
-        }.toList()
+        val portals = portalsString
+            .replace(" ","")
+            .split("-")
+            .map { it.split(",") }
+            .map {
+                Portal(
+                    start = it[0].toInt(),
+                    end = it[1].toInt(),
+                    isOpen = true
+                )
+            }
 
         _state.update { it.copy(portals = portals) }
 
     }
 
     private fun isPortalsStringValid(portalsString: String): Boolean {
-        return true //todo
+        val regex = """\d+,\d+( - \d+,\d+)*""".toRegex()
+        return regex.matches(portalsString)
     }
 }
